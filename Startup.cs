@@ -23,7 +23,7 @@ namespace BooksApi
         {
             Configuration = configuration;
         }
-
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -37,6 +37,19 @@ namespace BooksApi
                 sp.GetRequiredService<IOptions<BookstoreDatabaseSettings>>().Value);
 
             services.AddSingleton<BookService>();
+            //cors
+            services.AddCors(options =>
+        {
+            options.AddPolicy(name: MyAllowSpecificOrigins,
+                              builder =>
+                              {
+                                  builder.AllowAnyOrigin()
+                                  .AllowAnyHeader()
+                                  .AllowAnyHeader()
+
+                                  .AllowAnyMethod();
+                              });
+        });
 
             services.AddControllers()
                         .AddNewtonsoftJson(options => options.UseMemberCasing());
@@ -61,6 +74,7 @@ namespace BooksApi
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseEndpoints(endpoints =>
             {
