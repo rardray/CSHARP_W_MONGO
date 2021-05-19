@@ -6,7 +6,7 @@ export default function BookList(props) {
     <>
       {props.books.map((el, i) => {
         return (
-          <BoxItems>
+          <BoxItems key={el.Id}>
             <div>Title: {el.Name}</div>
             <div>Price: {el.Price}usd</div>
             <div>Category: {el.Category}</div>

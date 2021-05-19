@@ -23,6 +23,7 @@ namespace BooksApi
         {
             Configuration = configuration;
         }
+        //cors policy container
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public IConfiguration Configuration { get; }
 
@@ -37,7 +38,7 @@ namespace BooksApi
                 sp.GetRequiredService<IOptions<BookstoreDatabaseSettings>>().Value);
 
             services.AddSingleton<BookService>();
-            //cors
+            // Add cors
             services.AddCors(options =>
         {
             options.AddPolicy(name: MyAllowSpecificOrigins,
@@ -50,7 +51,7 @@ namespace BooksApi
                                   .AllowAnyMethod();
                               });
         });
-
+            //json
             services.AddControllers()
                         .AddNewtonsoftJson(options => options.UseMemberCasing());
             services.AddSwaggerGen(c =>
@@ -74,6 +75,7 @@ namespace BooksApi
             app.UseRouting();
 
             app.UseAuthorization();
+            //init Cors
             app.UseCors(MyAllowSpecificOrigins);
 
             app.UseEndpoints(endpoints =>
